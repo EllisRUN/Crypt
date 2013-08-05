@@ -62,7 +62,7 @@ class keyStick(object):
 			dev.write(buf)
 			dev.flush()
 		os.system('parted -s '+self.dev+' mklabel msdos')
-		os.system('parted -s '+self.dev+' unit KiB mkpart primary fat32 -- 0 ' + str(self.devSizeKiB-512))
+		os.system('parted -s '+self.dev+' unit KiB mkpart primary fat32 -- 0 ' + str(self.devSizeKiB-2))
 		self.generateKey()
 		
 		
@@ -72,7 +72,8 @@ class keyStick(object):
 			buf = Random.new().read(1024)
 			dev.seek(startByte)
 			dev.write(buf)
-			dev.flush()		
+			dev.flush()
+		return True		
 			
 	def readKey(self):
 		with open(self.dev, 'rb') as dev:
@@ -89,7 +90,8 @@ class keyStick(object):
  		
 		
 kStick = keyStick('/dev/mmcblk0')
-
+print kStick.readKey()
+sys.exit()
 
 
 def getHostPubKeyDigest():
